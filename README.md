@@ -1,5 +1,9 @@
 
 # EDU Backend & Frontend
+## Descripción del proyecto
+
+Este proyecto es una aplicación educativa que proporciona estadísticas y gestión de usuarios y cursos. El backend está construido con FastAPI y utiliza MongoDB Atlas como base de datos, mientras que el frontend es una aplicación React moderna desarrollada con Vite para visualizar datos de usuarios activos, inactivos y estadísticas relacionadas.
+
 
 ## Estructura del proyecto
 
@@ -26,6 +30,13 @@ edu/
 - **Pydantic**: Validación de datos
 - **Uvicorn**: Servidor ASGI
 - **Passlib (bcrypt)**: Hash de contraseñas
+## Requisitos previos
+
+- **Python 3.8+** para el backend
+- **Node.js 16+** para el frontend
+- **Docker** (opcional, para ejecución en contenedor)
+- **Cuenta en MongoDB Atlas** para la base de datos
+
 - **python-dotenv**: Variables de entorno
 - **React + Vite**: Frontend moderno
 
@@ -47,6 +58,19 @@ pip install -r requirements.txt
 
 ### 3. Ejecución local
 ```bash
+## Configuración
+
+### Variables de entorno
+
+Crea un archivo `.env` en la carpeta `backend/` con las siguientes variables:
+
+```env
+MONGODB_URL=mongodb+srv://<usuario>:<password>@cluster.mongodb.net/edu
+SECRET_KEY=tu_clave_secreta_aqui
+```
+
+Asegúrate de configurar tu conexión a MongoDB Atlas y una clave secreta segura.
+
 uvicorn mainBackend:app --reload --port 5000
 ```
 
@@ -69,6 +93,36 @@ Esto mostrará los logs en tiempo real y el backend estará disponible en `http:
 - `GET /docs` — Documentación interactiva (Swagger UI)
 
 ---
+
+## Desarrollo
+
+### Backend
+
+- El código principal está en `backend/mainBackend.py`.
+- Los modelos de datos en `backend/Models/`.
+- Controladores en `backend/Controller/`.
+- Configuración en `backend/config/`.
+
+## Contribución
+
+1. Haz un fork del repositorio.
+2. Crea una rama para tu feature (`git checkout -b feature/nueva-funcionalidad`).
+3. Haz commit de tus cambios (`git commit -am 'Agrega nueva funcionalidad'`).
+4. Push a la rama (`git push origin feature/nueva-funcionalidad`).
+5. Abre un Pull Request.
+
+## Licencia
+
+Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
+
+---
+
+¡Gracias por contribuir al proyecto EDU!
+- El componente principal es `frontend/src/App.jsx`.
+- Componentes en `frontend/src/components/`.
+- Hooks personalizados en `frontend/src/hooks/`.
+
+Para desarrollo local, ejecuta ambos servicios simultáneamente.
 
 ## Poblar la base de datos (Seed)
 
