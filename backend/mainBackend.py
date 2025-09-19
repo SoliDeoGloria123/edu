@@ -14,7 +14,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 print("Backend esta ready")
 
 # Ruta de bienvenida en /
