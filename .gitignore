@@ -1,0 +1,28 @@
+# Node
+node_modules/
+dist/
+.env
+
+# Python
+__pycache__/
+*.pyc
+
+# Docker
+*.log
+
+# IDEs
+.vscode/
+.idea/
+
+# Gradle/Android
+.gradle/
+.android/
+.VirtualBox/
+AppData/
+Configuración local/
+Datos de programa/
+Menú Inicio/
+Mis documentos/
+Plantillas/
+Reciente/
+SendTo/
