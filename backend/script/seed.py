@@ -3,8 +3,8 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
-from backend.config.dbConfig import init_db
-from backend.Models.users import User
+from config.dbConfig import init_db
+from Models.users import User
 
 def seed_users():
     users = [

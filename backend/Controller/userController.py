@@ -1,8 +1,8 @@
 from bson import ObjectId
 from fastapi import FastAPI
-from backend.config.dbConfig import init_db as db, list_users, count_users, count_users_by_status, update_user_in_db, delete_user_in_db
-from backend.Models.users import User
-from backend.config.security import hash_password as hasheo
+from config.dbConfig import init_db as db, list_users, count_users, count_users_by_status, update_user_in_db, delete_user_in_db
+from Models.users import User
+from config.security import hash_password as hasheo
 
 app = FastAPI()
 

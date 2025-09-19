@@ -4,8 +4,9 @@ FROM python:3.10
 # Crear directorio de trabajo
 WORKDIR /app
 
-# Copiar los archivos del backend
-COPY . /app
+
+# Copiar solo el contenido de backend al directorio de trabajo
+COPY ./ /app
 
 # Instalar dependencias
 RUN pip install --no-cache-dir -r requirements.txt
@@ -21,3 +22,6 @@ CMD ["uvicorn", "mainBackend:app", "--host", "0.0.0.0", "--port", "5000", "--rel
 
 # Con este comando corre la imagen
 # docker run -d -p 5000:5000 --name backend-container backend-image
+
+# Comando para detener el contenedor
+# docker rm -f backend-container
