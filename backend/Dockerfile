@@ -17,7 +17,7 @@ EXPOSE 5000
 CMD ["uvicorn", "mainBackend:app", "--host", "0.0.0.0", "--port", "5000", "--reload"]
 
 # Con este comando levanta la imagen
-# docker build -t backend-image .
+# docker build -t backend-image -f backend/dockerfile.backend .
 
 # Con este comando corre la imagen
 # docker run -d -p 5000:5000 --name backend-container backend-image
