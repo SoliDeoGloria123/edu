@@ -37,7 +37,7 @@ def count_users():
     return get_users_collection().count_documents({})
 
 def count_users_by_status(status: bool):
-    return get_users_collection().count_documents({"activo": status})
+    return get_users_collection().count_documents({"is_active": status})
 
 def update_user_in_db(user_id: str, data: dict):
     from datetime import datetime

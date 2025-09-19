@@ -1,59 +1,88 @@
-import { PieChart, Pie, Tooltip, ResponsiveContainer } from "recharts";
-
-const users = [
-  { name: "Ene", usuariosActivos: 300 },
-  { name: "Feb", usuariosActivos: 350 },
-  { name: "Mar", usuariosActivos: 400 },
-  { name: "Abr", usuariosActivos: 450 },
-  { name: "May", usuariosActivos: 500 },
-  { name: "Jun", usuariosActivos: 550 },
-  { name: "Jul", usuariosActivos: 600 },
-];
-
-const courses = [
-  { name: "Ene", cursosActivos: 40 },
-  { name: "Feb", cursosActivos: 50 },
-  { name: "Mar", cursosActivos: 60 },
-  { name: "Abr", cursosActivos: 70 },
-  { name: "May", cursosActivos: 80 },
-  { name: "Jun", cursosActivos: 90 },
-  { name: "Jul", cursosActivos: 100 },
-];
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import useGetApi from "../hooks/useApi";
+import { useEffect, useState } from "react";
 
 export default function ActiveCoursesVsUsers() {
-  return (
-    <div className="rounded-lg w-full h-full shadow-md bg-white p-4">
-      <h2 className="text-lg font-semibold mb-4">
-        Cursos Activos vs Usuarios Activos
-      </h2>
+    const [combinedData, setCombinedData] = useState([
+        { name: "Ene", activos: 300, inactivos: 40 },
+        { name: "Feb", activos: 350, inactivos: 50 },
+        { name: "Mar", activos: 400, inactivos: 60 },
+        { name: "Abr", activos: 450, inactivos: 70 },
+        { name: "May", activos: 500, inactivos: 80 },
+        { name: "Jun", activos: 550, inactivos: 90 },
+        { name: "Actual", activos: 0, inactivos: 0 },
+    ]);
 
-      <div className="w-full h-80">
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
-            <Pie
-              data={users}
-              dataKey="usuariosActivos"
-              nameKey="name"
-              cx="50%"
-              cy="50%"
-              outerRadius={60}
-              fill="#10b981"
-            />
-            <Pie
-              data={courses}
-              dataKey="cursosActivos"
-              nameKey="name"
-              cx="50%"
-              cy="50%"
-              innerRadius={70}
-              outerRadius={100}
-              fill="#3b82f6"
-              label
-            />
-            <Tooltip />
-          </PieChart>
-        </ResponsiveContainer>
-      </div>
-    </div>
-  );
+    // Datos de la API
+    const { data: activeUsersApi } = useGetApi("users/stats/active");
+    const { data: inactiveUsersApi } = useGetApi("users/stats/inactive");
+
+    // Actualizar usuarios activos
+    useEffect(() => {
+        if (activeUsersApi?.active_users) {
+            setCombinedData((prev) => {
+                const copy = [...prev];
+                copy[copy.length - 1] = {
+                    ...copy[copy.length - 1],
+                    activos: activeUsersApi.active_users,
+                };
+                console.log(activeUsersApi);
+                return copy;
+            });
+        }
+    }, [activeUsersApi]);
+
+    // Actualizar usuarios inactivos
+    useEffect(() => {
+        if (inactiveUsersApi?.inactive_users) {
+            setCombinedData((prev) => {
+                const copy = [...prev];
+                copy[copy.length - 1] = {
+                    ...copy[copy.length - 1],
+                    inactivos: inactiveUsersApi.inactive_users,
+                };
+                return copy;
+            });
+        }
+    }, [inactiveUsersApi]);
+
+    return (
+        <div className="rounded-lg h-full shadow-md p-4 bg-base-100">
+            <h2 className="text-xl font-bold mb-4 text-content">Usuarios Activos vs Inactivos</h2>
+
+            <div className="w-full h-80">
+                <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={combinedData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="name" />
+                        <YAxis />
+                        <Tooltip />
+                        <Legend
+                            verticalAlign="bottom"
+                            height={36}
+                            formatter={(value) => {
+                                if (value === "activos") return "Usuarios Activos";
+                                if (value === "inactivos") return "Usuarios Inactivos";
+                                return value;
+                            }}
+                        />
+                        <Line
+                            type="monotone"
+                            dataKey="activos"
+                            stroke="#10b981"
+                            strokeWidth={3}
+                            dot={{ fill: "#10b981", strokeWidth: 2, r: 4 }}
+                        />
+                        <Line
+                            type="monotone"
+                            dataKey="inactivos"
+                            stroke="#ef4444"
+                            strokeWidth={3}
+                            dot={{ fill: "#ef4444", strokeWidth: 2, r: 4 }}
+                        />
+                    </LineChart>
+                </ResponsiveContainer>
+            </div>
+        </div>
+    );
 }
