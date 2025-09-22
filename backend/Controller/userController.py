@@ -21,6 +21,13 @@ def read_users():
             user['_id'] = str(user['_id'])
     return {"success": True, "users": users, "status_code": 200}
 
+@app.post("/users")
+def create_user(user: User):
+    print(f'POST /users with data: {user}')
+    user.password = hasheo(user.password) 
+    result = db("users", user)
+    return {"success": True, "inserted_id": str(result.inserted_id), "status_code": 201}
+
 @app.put("/users/{user_id}")
 def update_user(user_id: str, user: User):
     print(f'PUT /users/{user_id} with data: {user}')
@@ -88,8 +95,8 @@ def login_user(user: UserLogin):
 
 # Controlador para registrar usuarios
 @app.post("/register")
-def create_user(user: User):
-    print(f'POST /users with data: {user}')
+def register_user(user: User):
+    print(f'POST /register with data: {user}')
     user.password = hasheo(user.password) 
     result = db("users", user)
     return {"success": True, "inserted_id": str(result.inserted_id), "status_code": 201}

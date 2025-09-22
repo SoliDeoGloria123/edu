@@ -18,11 +18,6 @@ export default function Home({ type }) {
 
     const { mutate, loading, error } = useMutationApi("/users", "POST");
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        navigation("/dashboard");
-    };
-
     const handleRegister = async (e) => {
         e.preventDefault();
         const userData = {
@@ -37,6 +32,25 @@ export default function Home({ type }) {
             console.log("Usuario registrado:", result);
         } else {
             console.error("Error al registrar:", error);
+        }
+    };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const response = await fetch("http://localhost:5000/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                email: loginEmail,
+                password: loginPassword
+            })
+        });
+        const data = await response.json();
+        if (data.success) {
+            // Guarda el token en localStorage
+            localStorage.setItem("token", data.token);
+            navigation("/dashboard");
+        } else {
+            alert(data.message || "Error de login");
         }
     };
 
