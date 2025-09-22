@@ -1,10 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.Controller.userController import app as user_app
+from Controller.coursesController import router as courses_router
+from Controller.userController import app as user_app
 
 app = FastAPI()
 # Montar las rutas de usuarios
 app.include_router(user_app.router)
+app.include_router(courses_router)
 
 app.add_middleware(
     CORSMiddleware,

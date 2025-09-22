@@ -27,22 +27,22 @@ def init_db(collection_name: str, model_instance) -> dict:
     return create_collection(create_db(init_client()), collection_name).insert_one(doc)
 
 # Funciones específicas para crear, leer, actualizar y eliminar usuarios
-def get_users_collection():
-    return create_collection(create_db(init_client()), "users")
+def get_collection(collection_name: str):
+    return create_collection(create_db(init_client()), collection_name)
 
 def list_users():
-    return list(get_users_collection().find({}))
+    return list(get_collection("users").find({}))
 
 def count_users():
-    return get_users_collection().count_documents({})
+    return get_collection("users").count_documents({})
 
 def count_users_by_status(status: bool):
-    return get_users_collection().count_documents({"is_active": status})
+    return get_collection("users").count_documents({"is_active": status})
 
 def update_user_in_db(user_id: str, data: dict):
     from datetime import datetime
     data['updated_at'] = datetime.utcnow()
-    return get_users_collection().update_one({"_id": user_id}, {"$set": data})
+    return get_collection("users").update_one({"_id": user_id}, {"$set": data})
 
 def delete_user_in_db(user_id: str):
-    return get_users_collection().delete_one({"_id": user_id})
+    return get_collection("users").delete_one({"_id": user_id})
