@@ -102,14 +102,6 @@ Esto mostrará los logs en tiempo real y el backend estará disponible en `http:
 - Controladores en `backend/Controller/`.
 - Configuración en `backend/config/`.
 
-## Contribución
-
-1. Haz un fork del repositorio.
-2. Crea una rama para tu feature (`git checkout -b feature/nueva-funcionalidad`).
-3. Haz commit de tus cambios (`git commit -am 'Agrega nueva funcionalidad'`).
-4. Push a la rama (`git push origin feature/nueva-funcionalidad`).
-5. Abre un Pull Request.
-
 ## Licencia
 
 Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.

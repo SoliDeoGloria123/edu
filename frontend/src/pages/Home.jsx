@@ -1,0 +1,179 @@
+import React, { useState } from "react";
+import { useMutationApi } from "../hooks/useApi";
+import { useNavigate } from "react-router-dom";
+
+export default function Home({ type }) {
+    const navigation = useNavigate();
+
+    // Estados para login
+    const [loginEmail, setLoginEmail] = useState("");
+    const [loginPassword, setLoginPassword] = useState("");
+
+    // Estados para registro
+    const [regName, setRegName] = useState("");
+    const [regUsername, setRegUsername] = useState("");
+    const [regEmail, setRegEmail] = useState("");
+    const [regPassword, setRegPassword] = useState("");
+    const [regPhone, setRegPhone] = useState("");
+
+    const { mutate, loading, error } = useMutationApi("/users", "POST");
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        navigation("/dashboard");
+    };
+
+    const handleRegister = async (e) => {
+        e.preventDefault();
+        const userData = {
+            name: regName,
+            username: regUsername,
+            email: regEmail,
+            password: regPassword,
+            phone: regPhone || undefined,
+        };
+        const result = await mutate(userData);
+        if (result) {
+            console.log("Usuario registrado:", result);
+        } else {
+            console.error("Error al registrar:", error);
+        }
+    };
+
+    return (
+        <div className="flex flex-col min-h-screen bg-base-100 p-6 justify-center items-center">
+            {type === "login" ? (
+                <div className="card bg-base-100 shadow-2xl p-8 w-full max-w-md">
+                    <div className="card-body">
+                        <h2 className="card-title text-2xl font-bold text-center mb-6">
+                            Iniciar Sesión
+                        </h2>
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                            <div className="form-control">
+                                <label className="label label-text" htmlFor="loginEmail">
+                                    <span className="label-text">Email</span>
+                                </label>
+                                <input
+                                    className="input input-bordered w-full"
+                                    type="email"
+                                    id="loginEmail"
+                                    value={loginEmail}
+                                    onChange={(e) => setLoginEmail(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div className="form-control">
+                                <label className="label label-text" htmlFor="loginPassword">
+                                    <span className="label-text">Contraseña</span>
+                                </label>
+                                <input
+                                    className="input input-bordered w-full"
+                                    type="password"
+                                    id="loginPassword"
+                                    value={loginPassword}
+                                    onChange={(e) => setLoginPassword(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div className="w-full flex justify-center mt-6">
+                                <button className="btn btn-primary btn-wide" type="submit">
+                                    Iniciar Sesión
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            ) : (
+                <div className="card bg-base-100 shadow-2xl p-8 w-full max-w-lg">
+                    <div className="card-body">
+                        <h2 className="card-title text-2xl font-bold text-center mb-6">
+                            Registro de Usuario
+                        </h2>
+                        <form onSubmit={handleRegister} className="space-y-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="form-control">
+                                    <label className="label label-text" htmlFor="regName">
+                                        <span className="label-text">Nombre</span>
+                                    </label>
+                                    <input
+                                        className="input input-bordered w-full"
+                                        type="text"
+                                        id="regName"
+                                        value={regName}
+                                        onChange={(e) => setRegName(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <div className="form-control">
+                                    <label className="label label-text" htmlFor="regUsername">
+                                        <span className="label-text">Usuario</span>
+                                    </label>
+                                    <input
+                                        className="input input-bordered w-full"
+                                        type="text"
+                                        id="regUsername"
+                                        value={regUsername}
+                                        onChange={(e) => setRegUsername(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                            </div>
+                            <div className="form-control">
+                                <label className="label label-text" htmlFor="regEmail">
+                                    <span className="label-text">Email</span>
+                                </label>
+                                <input
+                                    className="input input-bordered w-full"
+                                    type="email"
+                                    id="regEmail"
+                                    value={regEmail}
+                                    onChange={(e) => setRegEmail(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div className="form-control">
+                                <label className="label label-text" htmlFor="regPassword">
+                                    <span className="label-text">Contraseña</span>
+                                </label>
+                                <input
+                                    className="input input-bordered w-full"
+                                    type="password"
+                                    id="regPassword"
+                                    value={regPassword}
+                                    onChange={(e) => setRegPassword(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div className="form-control">
+                                <label className="label label-text" htmlFor="regPhone">
+                                    <span className="label-text">Teléfono (opcional)</span>
+                                </label>
+                                <input
+                                    className="input input-bordered w-full"
+                                    type="tel"
+                                    id="regPhone"
+                                    value={regPhone}
+                                    onChange={(e) => setRegPhone(e.target.value)}
+                                />
+                            </div>
+                            <div className="w-full flex justify-center mt-6">
+                                <button
+                                    className="btn btn-primary btn-wide"
+                                    type="submit"
+                                    disabled={loading}
+                                >
+                                    {loading ? "Registrando..." : "Registrar"}
+                                </button>
+                            </div>
+                            {error && (
+                                <p className="text-error text-center mt-4">
+                                    Error: {error.message}
+                                </p>
+                            )}
+                        </form>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}

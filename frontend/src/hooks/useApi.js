@@ -41,3 +41,38 @@ export default function useGetApi(url, headers = null) {
         reload,
     };
 }
+
+export  function useMutationApi(url, method = "POST") {
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    const mutate = async (body = {}, headers = null) => {
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await instance({
+                url,
+                method,
+                data: body,
+                headers,
+            });
+            setData(response.data);
+            return response.data;
+        } catch (err) {
+            console.error(`Error en ${method}:`, err);
+            setError(err);
+            setData(null);
+            return null;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return {
+        data,
+        loading,
+        error,
+        mutate, 
+    };
+}
