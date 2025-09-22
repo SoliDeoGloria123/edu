@@ -1,10 +1,16 @@
 from bson import ObjectId
 from fastapi import FastAPI
 from config.dbConfig import init_db as db, list_users, count_users, count_users_by_status, update_user_in_db, delete_user_in_db
-from Models.users import User
-from config.security import hash_password as hasheo
+from Models.users import User, UserLogin
+from config.security import hash_password as hasheo , verify_password
+import jwt
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 app = FastAPI()
+
+SECRET = str(os.getenv("SECRET"))
 
 @app.get("/users")
 def read_users():
@@ -75,3 +81,14 @@ def inactive_users():
     print("---")
     return {"success": True, "inactive_users": result, "status_code": 200}
 
+# Controlador para el login de usuarios
+@app.post("/login")
+def login_user(user: UserLogin):
+    for users in list_users():
+        if users['email'] == user.email:
+            if verify_password(user.password, users['password']):
+                token = jwt.encode({"email": user.email}, SECRET, algorithm="HS256")
+                return {"success": True, "message": "Login Exitoso", "token": token, "status_code": 200}
+            else:
+                return {"success": False, "message": "Contraseña incorrecta", "status_code": 401}
+    return {"success": False, "message": "Usuario no encontrado", "status_code": 404}

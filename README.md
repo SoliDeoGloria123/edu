@@ -149,7 +149,10 @@ El frontend estará disponible en `http://localhost:5173` y consumirá el backen
 
 ---
 
-> Para más detalles, consulta la documentación interactiva en `http://localhost:5000/docs`.
-> App desplegada: `https://edu-3e3i.onrender.com`
-> Frontend: `https://edu-frontend-ghew.onrender.com`
-> Backend:  `https://edu-backend-cpiy.onrender.com`
+> Para más detalles, consulta la documentación interactiva en `http://localhost:5000/docs`.<
+
+> App desplegada: `https://edu-3e3i.onrender.com`<
+
+> Frontend: `https://edu-frontend-ghew.onrender.com`<
+
+> Backend:  `https://edu-backend-cpiy.onrender.com`<
