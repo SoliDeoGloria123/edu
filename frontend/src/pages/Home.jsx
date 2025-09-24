@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useMutationApi } from "../hooks/useApi";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function Home({ type }) {
     const navigation = useNavigate();
@@ -14,12 +14,26 @@ export default function Home({ type }) {
     const [regUsername, setRegUsername] = useState("");
     const [regEmail, setRegEmail] = useState("");
     const [regPassword, setRegPassword] = useState("");
+    const [regConfirmPassword, setRegConfirmPassword] = useState("");
     const [regPhone, setRegPhone] = useState("");
+    const [regError, setRegError] = useState("");
 
     const { mutate, loading, error } = useMutationApi("/users", "POST");
 
     const handleRegister = async (e) => {
         e.preventDefault();
+        setRegError("");
+
+        // Validaciones
+        if (regPassword.length < 6) {
+            setRegError("La contraseña debe tener al menos 6 caracteres.");
+            return;
+        }
+        if (regPassword !== regConfirmPassword) {
+            setRegError("Las contraseñas no coinciden.");
+            return;
+        }
+
         const userData = {
             name: regName,
             username: regUsername,
@@ -30,8 +44,11 @@ export default function Home({ type }) {
         const result = await mutate(userData);
         if (result) {
             console.log("Usuario registrado:", result);
+            // Opcional: redirigir a login o dashboard
+            navigation("/");
         } else {
             console.error("Error al registrar:", error);
+            setRegError(error?.message || "Error al registrar usuario. El email podría ya estar en uso.");
         }
     };
     const handleSubmit = async (e) => {
@@ -94,6 +111,9 @@ export default function Home({ type }) {
                                     Iniciar Sesión
                                 </button>
                             </div>
+                            <p className="text-center mt-4">
+                                ¿No tienes cuenta? <Link to="/register" className="link link-primary">Regístrate</Link>
+                            </p>
                         </form>
                     </div>
                 </div>
@@ -159,6 +179,19 @@ export default function Home({ type }) {
                                 />
                             </div>
                             <div className="form-control">
+                                <label className="label label-text" htmlFor="regConfirmPassword">
+                                    <span className="label-text">Confirmar Contraseña</span>
+                                </label>
+                                <input
+                                    className="input input-bordered w-full"
+                                    type="password"
+                                    id="regConfirmPassword"
+                                    value={regConfirmPassword}
+                                    onChange={(e) => setRegConfirmPassword(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div className="form-control">
                                 <label className="label label-text" htmlFor="regPhone">
                                     <span className="label-text">Teléfono (opcional)</span>
                                 </label>
@@ -179,12 +212,15 @@ export default function Home({ type }) {
                                     {loading ? "Registrando..." : "Registrar"}
                                 </button>
                             </div>
-                            {error && (
+                            {regError && (
                                 <p className="text-error text-center mt-4">
-                                    Error: {error.message}
+                                    {regError}
                                 </p>
                             )}
-                        </form>
+                            <p className="text-center mt-4">
+                                ¿Ya tienes cuenta? <Link to="/" className="link link-primary">Inicia sesión</Link>
+                            </p>
+                         </form>
                     </div>
                 </div>
             )}
